@@ -1,0 +1,85 @@
+{
+  "realm": "geoai",
+  "displayName": "GeoAI Portal",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "resetPasswordAllowed": true,
+  "bruteForceProtected": true,
+  "roles": {
+    "realm": [
+      { "name": "administrator", "description": "Manages the portal: people, access rules and settings" },
+      { "name": "publisher", "description": "Adds and shares data, maps and apps" },
+      { "name": "user", "description": "Uses what is shared with them and works in projects" },
+      { "name": "viewer", "description": "Can only look at and download what is shared with them" }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "geoai-client",
+      "name": "GeoAI Portal",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": [ "${GEOAI_PUBLIC_URL}/*", "http://localhost:4200/*" ],
+      "webOrigins": [ "+" ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "${GEOAI_PUBLIC_URL}/*##http://localhost:4200/*"
+      },
+      "protocolMappers": [
+        {
+          "name": "geoai-api audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.custom.audience": "geoai-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        },
+        {
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-group-membership-mapper",
+          "consentRequired": false,
+          "config": {
+            "claim.name": "groups",
+            "full.path": "false",
+            "access.token.claim": "true",
+            "id.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "geoai-api",
+      "name": "GeoAI Portal API",
+      "description": "Used by the API itself to manage people (for example the first administrator in the setup wizard)",
+      "enabled": true,
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "${GEOAI_KEYCLOAK_CLIENT_SECRET}",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false
+    }
+  ],
+  "users": [
+    {
+      "username": "service-account-geoai-api",
+      "enabled": true,
+      "serviceAccountClientId": "geoai-api",
+      "clientRoles": {
+        "realm-management": [ "manage-users", "view-users", "query-users", "view-realm" ]
+      }
+    }
+  ]
+}

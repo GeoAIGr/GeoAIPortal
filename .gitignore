@@ -1,0 +1,12 @@
+# Your settings with passwords: never commit. Copy .env.example to start one.
+.env
+
+# Building the images from source: only for the maintainers. Everyone else runs the Docker Hub images.
+docker-compose.build.yml
+
+# Editors and operating systems
+.vs/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

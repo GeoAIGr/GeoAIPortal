@@ -1,0 +1,46 @@
+# GeoAI Portal with YOUR OWN PostgreSQL/PostGIS and Keycloak (for example on other servers).
+# Starts only the portal itself: the API and the web client.
+#
+#     cp .env.example .env     then fill in the section "Your own database and Keycloak"
+#     docker compose -f docker-compose.external.yml up -d
+#
+# Everything on one machine instead? Use docker-compose.yml (just "docker compose up -d").
+# The images come from Docker Hub.
+
+name: geoai-portal
+
+services:
+  api:
+    image: geoaiportal/api:${GEOAI_VERSION:-latest}
+    restart: unless-stopped
+    environment:
+      GEOAI_PUBLIC_URL: ${GEOAI_PUBLIC_URL:-}
+      GEOAI_BEHIND_PROXY: ${GEOAI_BEHIND_PROXY:-false}
+      GEOAI_CORS_ORIGINS: ${GEOAI_CORS_ORIGINS:-}
+      GEOAI_DB_CONNECTION: ${GEOAI_DB_CONNECTION:-}
+      GEOAI_DB_MIGRATION_CONNECTION: ${GEOAI_DB_MIGRATION_CONNECTION:-}
+      GEOAI_DB_AUTO_MIGRATE: ${GEOAI_DB_AUTO_MIGRATE:-true}
+      GEOAI_KEYCLOAK_URL: ${GEOAI_KEYCLOAK_URL:-}
+      GEOAI_KEYCLOAK_INTERNAL_URL: ${GEOAI_KEYCLOAK_INTERNAL_URL:-}
+      GEOAI_KEYCLOAK_REALM: ${GEOAI_KEYCLOAK_REALM:-geoai}
+      GEOAI_KEYCLOAK_REQUIRE_HTTPS: ${GEOAI_KEYCLOAK_REQUIRE_HTTPS:-true}
+      GEOAI_KEYCLOAK_CLIENT_SECRET: ${GEOAI_KEYCLOAK_CLIENT_SECRET:-}
+      GEOAI_MAX_UPLOAD_MB: ${GEOAI_MAX_UPLOAD_MB:-512}
+      GEOAI_IMPORT_WORKERS: ${GEOAI_IMPORT_WORKERS:-2}
+      GEOAI_IMPORT_TIMEOUT_MINUTES: ${GEOAI_IMPORT_TIMEOUT_MINUTES:-60}
+    volumes:
+      - geoai-files:/data/files
+
+  # The web client. Also forwards /api and /health to the API, so people only need this one port.
+  client:
+    image: geoaiportal/client:${GEOAI_VERSION:-latest}
+    restart: unless-stopped
+    ports:
+      - "${GEOAI_PORT:-8080}:8080"
+    environment:
+      GEOAI_MAX_UPLOAD_MB: ${GEOAI_MAX_UPLOAD_MB:-512}
+    depends_on:
+      - api
+
+volumes:
+  geoai-files:
