@@ -3,12 +3,12 @@
 An open-source, self-hosted portal for geographic data, maps and apps.
 Content builds on itself: **Data → Services → Layers → Maps → Apps**.
 
-This repository runs the portal with Docker Compose. The portal itself is built in two other repositories and
-published as images on Docker Hub:
+This repository, [GeoAIGr/GeoAIPortal](https://github.com/GeoAIGr/GeoAIPortal), runs the portal with Docker
+Compose. The portal itself is built in two other repositories and published as images on Docker Hub:
 
 | Part | Where | Built with |
 |---|---|---|
-| Running it | `portaldeploy` (this one) | Docker Compose, Keycloak realm, nginx and database settings |
+| Running it | [`GeoAIPortal`](https://github.com/GeoAIGr/GeoAIPortal) (this one) | Docker Compose, Keycloak realm, nginx and database settings |
 | Web client | [`geoaiportal/client`](https://hub.docker.com/r/geoaiportal/client), from `portalclient` | Angular, served by nginx |
 | API | [`geoaiportal/api`](https://hub.docker.com/r/geoaiportal/api), from `portalapi` | .NET 10 |
 | Database | `postgis/postgis` | PostgreSQL 17 + PostGIS |
@@ -24,15 +24,20 @@ the images are downloaded.
 1. **Get this repository**
 
    ```bash
-   git clone <this repository's address> portaldeploy
-   cd portaldeploy
+   git clone https://github.com/GeoAIGr/GeoAIPortal.git geoaiportal
+   cd geoaiportal
    ```
 
 2. **Create your settings file**
 
+   Make a copy of `.env.example` and name the copy `.env`: copy and paste the file in the same folder, then rename
+   the copy. Or with a command:
+
    ```bash
    cp .env.example .env
    ```
+
+   On Windows (PowerShell or Command Prompt): `copy .env.example .env`
 
    Open `.env` and change the passwords. Is port 8080 already in use on your machine? Change
    `GEOAI_PORT` and the port in `GEOAI_PUBLIC_URL`.
