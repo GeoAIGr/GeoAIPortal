@@ -74,7 +74,7 @@ the images are downloaded.
 |---|---|
 | `/` | The portal |
 | `/health` | Status of the API, database and Keycloak |
-| `/auth/admin` | Keycloak admin console (user `KEYCLOAK_ADMIN` from `.env`): users, roles and groups |
+| `/auth/admin` | Keycloak admin console (user `KEYCLOAK_ADMIN` from `.env`). People are managed in the portal (Settings > People); this is for Keycloak itself |
 
 ## Versions
 
@@ -100,6 +100,17 @@ docker compose up -d
 ```
 
 `git pull` brings changes to these files, such as a newer Keycloak realm; your `.env` stays as it is.
+
+## Languages
+
+The portal speaks English, Albanian, Macedonian, Dutch, German, French, Spanish, Portuguese, Italian, Turkish,
+Arabic, Chinese and Japanese. Everyone picks their own in the top bar; an administrator sets the language for people
+who have not chosen one under Settings > Language.
+
+Keycloak's sign-in page follows the language too (it has no Albanian or Macedonian yet: those sign in in English).
+The realm in `docker/keycloak` turns this on for new installs. A portal set up before can turn it on in the Keycloak
+admin console (`/auth/admin`): realm `geoai` > Realm settings > Localization > Internationalization on, and add the
+languages.
 
 ## Your own database or Keycloak
 

@@ -7,6 +7,9 @@
   "loginWithEmailAllowed": true,
   "resetPasswordAllowed": true,
   "bruteForceProtected": true,
+  "internationalizationEnabled": true,
+  "supportedLocales": ["en", "nl", "de", "fr", "es", "pt-BR", "it", "tr", "ar", "zh-CN", "ja"],
+  "defaultLocale": "en",
   "roles": {
     "realm": [
       { "name": "administrator", "description": "Manages the portal: people, access rules and settings" },
@@ -41,19 +44,6 @@
             "access.token.claim": "true",
             "id.token.claim": "false",
             "introspection.token.claim": "true"
-          }
-        },
-        {
-          "name": "groups",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-group-membership-mapper",
-          "consentRequired": false,
-          "config": {
-            "claim.name": "groups",
-            "full.path": "false",
-            "access.token.claim": "true",
-            "id.token.claim": "true",
-            "userinfo.token.claim": "true"
           }
         }
       ]
