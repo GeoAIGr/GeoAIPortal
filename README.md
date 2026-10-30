@@ -112,6 +112,26 @@ The realm in `docker/keycloak` turns this on for new installs. A portal set up b
 admin console (`/auth/admin`): realm `geoai` > Realm settings > Localization > Internationalization on, and add the
 languages.
 
+## QGIS
+
+The GeoAI Portal plugin for QGIS (in `portalqgis`) brings portal layers and maps into QGIS and sends QGIS layers to
+the portal. People sign in with their portal account in the browser. For that, the portal's Keycloak client accepts
+the address `http://127.0.0.1/*` (the plugin's local sign-in answer); the realm here has it for new installs. A portal
+set up before can add it in the Keycloak admin console (`/auth/admin`): realm `geoai` > Clients > `geoai-client` >
+Valid redirect URIs.
+
+## Coordinate systems
+
+Uploaded data is stored in WGS 84, so every map, layer and app can use it. The portal remembers the coordinate
+system it came in: downloads, and layers added through the QGIS plugin or the OGC API, come back in that one,
+with the same coordinates.
+
+Most coordinate systems convert by a published formula. Some (older datums such as NAD27) need a transformation
+grid: the API and the database fetch the ones they need from `cdn.proj.org` when first used and keep them, so
+both convert the same way. Without internet access set `GEOAI_PROJ_NETWORK=OFF`; those conversions are then a
+few metres off. Your own database (`docker-compose.external.yml`): set `PROJ_NETWORK=ON` in the environment of
+its PostgreSQL server.
+
 ## Your own database or Keycloak
 
 Already have PostgreSQL/PostGIS or Keycloak on another server? Fill in the last section of `.env`

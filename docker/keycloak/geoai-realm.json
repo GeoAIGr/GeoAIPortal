@@ -27,7 +27,7 @@
       "standardFlowEnabled": true,
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": false,
-      "redirectUris": [ "${GEOAI_PUBLIC_URL}/*", "http://localhost:4200/*" ],
+      "redirectUris": [ "${GEOAI_PUBLIC_URL}/*", "http://localhost:4200/*", "http://127.0.0.1/*" ],
       "webOrigins": [ "+" ],
       "attributes": {
         "pkce.code.challenge.method": "S256",

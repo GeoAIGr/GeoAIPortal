@@ -19,6 +19,8 @@ services:
       POSTGRES_USER: geoai
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
       KEYCLOAK_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:?Set KEYCLOAK_DB_PASSWORD in .env}
+      # PostGIS converts too (OGC API in the data's own coordinate system): the same grids as the API.
+      PROJ_NETWORK: ${GEOAI_PROJ_NETWORK:-ON}
     volumes:
       - geoai-db:/var/lib/postgresql/data
       # Runs once, when the volume is new: creates Keycloak's own database on the same server.
